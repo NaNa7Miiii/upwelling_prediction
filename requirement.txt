@@ -1,0 +1,7 @@
+keras
+numpy
+matplotlib
+plotly
+streamlit
+requests
+xarray
