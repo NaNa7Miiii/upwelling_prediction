@@ -3,7 +3,7 @@ import streamlit as st
 
 from utils import *
 
-secrets = st.secrets["earthdata"]
+secrets = st.secrets["earthdata_test"]
 machine = secrets["machine"]
 login = secrets["login"]
 password = secrets["password"]
