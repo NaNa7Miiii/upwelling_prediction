@@ -3,15 +3,10 @@ import streamlit as st
 
 from utils import *
 
-# secrets = st.secrets["earthdata_test"]
-# machine = secrets["machine"]
-# login = secrets["login"]
-# password = secrets["password"]
-
-
-machine = "urs.earthdata.nasa.gov"
-login = "jiaruy2"
-password = "090909Pan"
+secrets = st.secrets["earthdata_test"]
+machine = secrets["machine"]
+login = secrets["login"]
+password = secrets["password"]
 
 # Set up session state variables
 session_vars = ['data_fetched', 'step', 'view', 'sst_data', 'ds_list']
