@@ -1,26 +1,28 @@
 import datetime
 import streamlit as st
-
+import os
 from utils import *
 
+NETRC_PATH = os.path.expanduser("~/.netrc")
 # secrets = st.secrets["earthdata_test"]
 # machine = secrets["machine"]
 # login = secrets["login"]
 # password = secrets["password"]
 
-def create_netrc(machine, login, password):
+
+def create_netrc(machine, login, password, path=NETRC_PATH):
     netrc_content = f"""
     machine {machine}
     login {login}
     password {password}
     """
     
-    with open(".netrc", "w") as file:
+    with open(path, "w") as file:
         file.write(netrc_content)
         
-    os.chmod(".netrc", 0o600) 
+    os.chmod(path, 0o600) 
 
-with open(".netrc", "r") as f:
+with open(NETRC_PATH, "r") as f:
     content = f.read()
 st.text(content)
 
