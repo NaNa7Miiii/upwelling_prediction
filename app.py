@@ -3,10 +3,26 @@ import streamlit as st
 
 from utils import *
 
+# secrets = st.secrets["earthdata_test"]
+# machine = secrets["machine"]
+# login = secrets["login"]
+# password = secrets["password"]
+
+def create_netrc(machine, login, password):
+    netrc_content = f"""
+    machine {machine}
+    login {login}
+    password {password}
+    """
+    
+    with open(".netrc", "w") as file:
+        file.write(netrc_content)
+        
+    os.chmod(".netrc", 0o600) 
+
+
 secrets = st.secrets["earthdata_test"]
-machine = secrets["machine"]
-login = secrets["login"]
-password = secrets["password"]
+create_netrc(secrets["machine"], secrets["login"], secrets["password"])
 
 # Set up session state variables
 session_vars = ['data_fetched', 'step', 'view', 'sst_data', 'ds_list']
