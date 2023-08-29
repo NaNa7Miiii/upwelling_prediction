@@ -25,12 +25,12 @@ def create_netrc(machine, login, password, path=NETRC_PATH):
 secrets = st.secrets["earthdata_test"]
 create_netrc(secrets["machine"], secrets["login"], secrets["password"])
 
-if os.path.exists(NETRC_PATH):
-    with open(NETRC_PATH, "r") as f:
-        content = f.read()
-    st.text(content)
-else:
-    st.warning("NETRC file not found!")
+# if os.path.exists(NETRC_PATH):
+#     with open(NETRC_PATH, "r") as f:
+#         content = f.read()
+#     st.text(content)
+# else:
+#     st.warning("NETRC file not found!")
 
 # Set up session state variables
 session_vars = ['data_fetched', 'step', 'view', 'sst_data', 'ds_list']
