@@ -3,12 +3,12 @@ import streamlit as st
 import os
 from utils import *
 
-NETRC_PATH = os.path.expanduser("~/.netrc")
 # secrets = st.secrets["earthdata_test"]
 # machine = secrets["machine"]
 # login = secrets["login"]
 # password = secrets["password"]
 
+NETRC_PATH = os.path.expanduser("~/.netrc")
 
 def create_netrc(machine, login, password, path=NETRC_PATH):
     netrc_content = f"""
@@ -22,12 +22,15 @@ def create_netrc(machine, login, password, path=NETRC_PATH):
         
     os.chmod(path, 0o600) 
 
-with open(NETRC_PATH, "r") as f:
-    content = f.read()
-st.text(content)
-
 secrets = st.secrets["earthdata_test"]
 create_netrc(secrets["machine"], secrets["login"], secrets["password"])
+
+if os.path.exists(NETRC_PATH):
+    with open(NETRC_PATH, "r") as f:
+        content = f.read()
+    st.text(content)
+else:
+    st.warning("NETRC file not found!")
 
 # Set up session state variables
 session_vars = ['data_fetched', 'step', 'view', 'sst_data', 'ds_list']
