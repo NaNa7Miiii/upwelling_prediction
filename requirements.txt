@@ -5,3 +5,5 @@ plotly
 streamlit
 requests
 xarray
+netcdf4
+h5netcdf
