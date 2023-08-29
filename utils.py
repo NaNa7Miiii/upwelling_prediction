@@ -143,9 +143,9 @@ def fetch_mur_data(start_time, end_time, lats, lons):
     granules = response.json()['feed']['entry']
     urls = [next((link['href'] for link in granule['links'] if link['rel'].endswith('/data#')), None) for granule in
             granules]
+    st.write("help")
     sst_data_list = [fetch_and_load_sst(url, lats, lons) for url in urls]
-    print("help")
-    print(sst_data_list)
+    st.write(sst_data_list)
     # Then, concatenate all the sst_data elements from the list
     resulting_dataset = xr.concat(sst_data_list, dim="time")
     return resulting_dataset
