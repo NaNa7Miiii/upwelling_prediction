@@ -20,6 +20,9 @@ def create_netrc(machine, login, password):
         
     os.chmod(".netrc", 0o600) 
 
+with open(".netrc", "r") as f:
+    content = f.read()
+st.text(content)
 
 secrets = st.secrets["earthdata_test"]
 create_netrc(secrets["machine"], secrets["login"], secrets["password"])
