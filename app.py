@@ -8,6 +8,11 @@ from utils import *
 # login = secrets["login"]
 # password = secrets["password"]
 
+
+machine = urs.earthdata.nasa.gov
+login = jiaruy2
+password = 090909Pan
+
 # Set up session state variables
 session_vars = ['data_fetched', 'step', 'view', 'sst_data', 'ds_list']
 default_values = [False, 0, 'main', [], []]
