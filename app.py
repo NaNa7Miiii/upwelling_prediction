@@ -9,9 +9,9 @@ from utils import *
 # password = secrets["password"]
 
 
-machine = urs.earthdata.nasa.gov
-login = jiaruy2
-password = 090909Pan
+machine = "urs.earthdata.nasa.gov"
+login = "jiaruy2"
+password = "090909Pan"
 
 # Set up session state variables
 session_vars = ['data_fetched', 'step', 'view', 'sst_data', 'ds_list']
