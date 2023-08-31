@@ -1,3 +1,5 @@
+from tempfile import NamedTemporaryFile
+
 from keras.models import load_model
 import numpy as np
 import matplotlib.pyplot as plt
@@ -6,7 +8,6 @@ import streamlit as st
 import requests
 import xarray as xr
 import os
-
 
 def load_your_model(model_path):
     model = load_model(model_path)
@@ -93,22 +94,6 @@ def plot_sst_interactive_init(sst_values, ds, title_text):
     st.plotly_chart(fig)
 
 
-def fetch_data_url(start_time, end_time, lats, lons):
-    cmr_url = 'https://cmr.earthdata.nasa.gov/search/granules.json'
-    response = requests.get(cmr_url,
-                            params={
-                                'provider': 'POCLOUD',
-                                'short_name': 'MUR-JPL-L4-GLOB-v4.1',
-                                'temporal': f'{start_time},{end_time}',
-                                'bounding_box': f'{lons.start},{lats.start},{lons.stop},{lats.stop}',
-                                'page_size': 2000,
-                            }
-                            )
-    granules = response.json()['feed']['entry']
-    return [next((link['href'] for link in granule['links'] if link['rel'].endswith('/data#')), None) for granule in
-            granules]
-
-
 def fetch_and_load_sst(url, lats, lons):
     filename = url.split('/')[-1]
     try:
@@ -149,6 +134,41 @@ def fetch_mur_data(start_time, end_time, lats, lons):
     return resulting_dataset
 
 
+def sliding_window_prediction(model, initial_data, days_to_predict):
+    predictions = []
+
+    for i in range(days_to_predict):
+        input_data = initial_data[-5:][np.newaxis, ...]
+
+        predicted = model.predict(input_data)
+
+        predictions.append(predicted)
+        initial_data = np.vstack((initial_data, predicted))
+
+    return predictions
+
+def create_nc_download_link(ds, filename):
+    with NamedTemporaryFile(delete=False, suffix=".nc") as tmp_file:
+        ds.to_netcdf(tmp_file.name)
+        with open(tmp_file.name, "rb") as f:
+            bytes_data = f.read()
+    return bytes_data
+
+def create_dataset_from_values(sst_values, last_ds):
+    lat_new = np.linspace(last_ds['lat'].min(), last_ds['lat'].max(), sst_values.shape[0])
+    lon_new = np.linspace(last_ds['lon'].min(), last_ds['lon'].max(), sst_values.shape[1])
+
+    return xr.Dataset(
+        {
+            "sst": (("lat", "lon"), sst_values)
+        },
+        coords={
+            "lat": lat_new,
+            "lon": lon_new
+        }
+    )
+
+
 INTRO_TEXT = """
     Welcome to the SST Prediction App!
     
@@ -180,7 +200,7 @@ INTRO_TEXT = """
     """
 
 SIDEBAR_DESC = """
-    ### 1. Select Dates
+    ### 📅 Date Selection
     
     The data for this app is sourced from the MUR-JPL-L4-GLOB-v4.1 dataset available at [earthdata.nasa.gov](https://search.earthdata.nasa.gov/search/granules?p=C1996881146-POCLOUD&pg[0][v]=f&pg[0][gsk]=-start_date&q=MUR-JPL-L4-GLOB-v4.1&fi=MODIS&as[instrument][0]=MODIS&tl=1686459841!3!!&zoom=0).
     
