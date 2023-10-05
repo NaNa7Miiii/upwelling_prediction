@@ -31,7 +31,7 @@ The data used hails from the [MUR-JPL-L4-GLOB-v4.1](https://search.earthdata.nas
 
 1. Clone the repo:
 ```bash
-git clone https://github.com/NaNa7Miiii/upwelling_prediction.git)https://github.com/NaNa7Miiii/upwelling_prediction.git
+git clone https://github.com/NaNa7Miiii/upwelling_prediction.git
 ```
 2. Navigate to the directory：
 ```bash
