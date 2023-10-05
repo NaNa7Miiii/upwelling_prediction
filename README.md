@@ -45,3 +45,24 @@ pip install -r requirements.txt
 ```bash
 streamlit run app.py
 ```
+
+5. Please comment out this chunk of code which aims to create a .netrc file to access NASA's data, but if you want to deploy the repo in streamlit cloud please don't do anything on that:
+```
+NETRC_PATH = os.path.expanduser("~/.netrc")
+
+def create_netrc(machine, login, password, path=NETRC_PATH):
+    netrc_content = f"""
+    machine {machine}
+    login {login}
+    password {password}
+    """
+
+    with open(path, "w") as file:
+        file.write(netrc_content)
+
+    os.chmod(path, 0o600)
+
+secrets = st.secrets["earthdata_test"]
+create_netrc(secrets["machine"], secrets["login"], secrets["password"])
+```
+After all that, you are ready to go!
